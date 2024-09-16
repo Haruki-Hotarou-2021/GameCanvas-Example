@@ -22,26 +22,25 @@ let button = {
 };
 
 function update() {
-  
   cv.clear();
 
   const rect = cv.rect(
-    button.x, 
-    -button.y, 
-    button.width, 
-    button.height, 
-    button.color, 
-    button.rotate, 
+    button.x,
+    -button.y,
+    button.width,
+    button.height,
+    button.color,
+    button.rotate,
     button.z
   );
 
   const spr = cv.spr(
-    player.x, 
-    -player.y, 
-    player.width, 
-    player.height, 
-    player.image, 
-    player.rotation, 
+    player.x,
+    -player.y,
+    player.width,
+    player.height,
+    player.image,
+    player.rotation,
     player.z
   );
 

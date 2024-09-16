@@ -1,13 +1,13 @@
 class GameCanvas extends HTMLElement {
   static get observedAttributes() {
-    return ['grid', 'width', 'height'];
+    return ["grid", "width", "height"];
   }
 
   constructor() {
     super();
-    const shadow = this.attachShadow({ mode: 'closed' });
+    const shadow = this.attachShadow({ mode: "closed" });
 
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.textContent = `
       :host {
         display: block;
@@ -25,11 +25,14 @@ class GameCanvas extends HTMLElement {
       }
     `;
 
-    this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    this.svg.setAttribute('viewBox', '-500 -500 1000 1000');
+    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    this.svg.setAttribute("viewBox", "-500 -500 1000 1000");
 
-    this.gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    this.gridGroup.setAttribute('class', 'grid');
+    this.gridGroup = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g"
+    );
+    this.gridGroup.setAttribute("class", "grid");
 
     this.svg.appendChild(this.gridGroup);
     shadow.appendChild(style);
@@ -39,17 +42,17 @@ class GameCanvas extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'grid') {
+    if (name === "grid") {
       this.updateGrid();
     }
-    if (name === 'width' || name === 'height') {
+    if (name === "width" || name === "height") {
       this.updateSize();
     }
   }
 
   updateSize() {
-    const width = this.getAttribute('width');
-    const height = this.getAttribute('height');
+    const width = this.getAttribute("width");
+    const height = this.getAttribute("height");
     if (width) {
       //this.svg.setAttribute('width', width);
       this.style.width = width;
@@ -61,8 +64,8 @@ class GameCanvas extends HTMLElement {
   }
 
   updateGrid() {
-    const gridSize = parseInt(this.getAttribute('grid'), 10);
-    this.gridGroup.innerHTML = '';
+    const gridSize = parseInt(this.getAttribute("grid"), 10);
+    this.gridGroup.innerHTML = "";
 
     if (!gridSize || gridSize <= 0) {
       return;
@@ -70,35 +73,50 @@ class GameCanvas extends HTMLElement {
 
     const viewBox = this.svg.viewBox.baseVal;
     for (let x = viewBox.x; x <= viewBox.x + viewBox.width; x += gridSize) {
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', x);
-      line.setAttribute('y1', viewBox.y);
-      line.setAttribute('x2', x);
-      line.setAttribute('y2', viewBox.y + viewBox.height);
+      const line = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line"
+      );
+      line.setAttribute("x1", x);
+      line.setAttribute("y1", viewBox.y);
+      line.setAttribute("x2", x);
+      line.setAttribute("y2", viewBox.y + viewBox.height);
       this.gridGroup.appendChild(line);
     }
 
     for (let y = viewBox.y; y <= viewBox.y + viewBox.height; y += gridSize) {
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', viewBox.x);
-      line.setAttribute('y1', y);
-      line.setAttribute('x2', viewBox.x + viewBox.width);
-      line.setAttribute('y2', y);
+      const line = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line"
+      );
+      line.setAttribute("x1", viewBox.x);
+      line.setAttribute("y1", y);
+      line.setAttribute("x2", viewBox.x + viewBox.width);
+      line.setAttribute("y2", y);
       this.gridGroup.appendChild(line);
     }
   }
 
-  rect(x = 0, y = 0, width = 100, height = 100, color = 'black', rotate = 0, z = 0, scale = 1) {
-    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect(
+    x = 0,
+    y = 0,
+    width = 100,
+    height = 100,
+    color = "black",
+    rotate = 0,
+    z = 0,
+    scale = 1
+  ) {
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 
     const adjustedX = x - width / 2;
     const adjustedY = y - height / 2;
 
-    rect.setAttribute('x', adjustedX);
-    rect.setAttribute('y', adjustedY);
-    rect.setAttribute('width', width);
-    rect.setAttribute('height', height);
-    rect.setAttribute('fill', color);
+    rect.setAttribute("x", adjustedX);
+    rect.setAttribute("y", adjustedY);
+    rect.setAttribute("width", width);
+    rect.setAttribute("height", height);
+    rect.setAttribute("fill", color);
 
     let transform = `
       translate(${x}, ${y})
@@ -106,7 +124,7 @@ class GameCanvas extends HTMLElement {
       rotate(${rotate})
       translate(${-x}, ${-y})
     `;
-    rect.setAttribute('transform', transform.trim());
+    rect.setAttribute("transform", transform.trim());
 
     this.elements.push({ element: rect, z });
 
@@ -118,7 +136,7 @@ class GameCanvas extends HTMLElement {
 
     // Add the onClick method
     rect.onClick = (callback) => {
-      rect.addEventListener('click', (e) => {
+      rect.addEventListener("click", (e) => {
         const rectBounds = rect.getBoundingClientRect();
         const clickX = e.clientX;
         const clickY = e.clientY;
@@ -129,7 +147,7 @@ class GameCanvas extends HTMLElement {
           clickY >= rectBounds.top &&
           clickY <= rectBounds.bottom
         ) {
-          if (typeof callback === 'function') {
+          if (typeof callback === "function") {
             callback(e);
           } else {
             return true;
@@ -142,7 +160,7 @@ class GameCanvas extends HTMLElement {
 
     // Add the onTouch method
     rect.onTouch = (callback) => {
-      rect.addEventListener('touchstart', (e) => {
+      rect.addEventListener("touchstart", (e) => {
         const touch = e.touches[0];
         const rectBounds = rect.getBoundingClientRect();
         const touchX = touch.clientX;
@@ -154,7 +172,7 @@ class GameCanvas extends HTMLElement {
           touchY >= rectBounds.top &&
           touchY <= rectBounds.bottom
         ) {
-          if (typeof callback === 'function') {
+          if (typeof callback === "function") {
             callback(e);
           } else {
             return true;
@@ -167,8 +185,8 @@ class GameCanvas extends HTMLElement {
 
     // Add the onRelease method
     rect.onRelease = (callback) => {
-      rect.addEventListener('touchend', (e) => {
-        if (typeof callback === 'function') {
+      rect.addEventListener("touchend", (e) => {
+        if (typeof callback === "function") {
           callback(e);
         }
       });
@@ -177,13 +195,24 @@ class GameCanvas extends HTMLElement {
     return rect;
   }
 
-  circ(cx = 0, cy = 0, radius = 50, color = 'black', rotate = 0, z = 0, scale = 1) {
-    const circ = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  circ(
+    cx = 0,
+    cy = 0,
+    radius = 50,
+    color = "black",
+    rotate = 0,
+    z = 0,
+    scale = 1
+  ) {
+    const circ = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "circle"
+    );
 
-    circ.setAttribute('cx', cx);
-    circ.setAttribute('cy', cy);
-    circ.setAttribute('r', radius);
-    circ.setAttribute('fill', color);
+    circ.setAttribute("cx", cx);
+    circ.setAttribute("cy", cy);
+    circ.setAttribute("r", radius);
+    circ.setAttribute("fill", color);
 
     let transform = `
       translate(${cx}, ${cy})
@@ -191,7 +220,7 @@ class GameCanvas extends HTMLElement {
       rotate(${rotate})
       translate(${-cx}, ${-cy})
     `;
-    circ.setAttribute('transform', transform.trim());
+    circ.setAttribute("transform", transform.trim());
 
     this.elements.push({ element: circ, z });
 
@@ -203,7 +232,7 @@ class GameCanvas extends HTMLElement {
 
     // Add the onClick method
     circ.onClick = (callback) => {
-      circ.addEventListener('click', (e) => {
+      circ.addEventListener("click", (e) => {
         const circBounds = circ.getBoundingClientRect();
         const clickX = e.clientX;
         const clickY = e.clientY;
@@ -213,7 +242,7 @@ class GameCanvas extends HTMLElement {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= circBounds.width / 2) {
-          if (typeof callback === 'function') {
+          if (typeof callback === "function") {
             callback(e);
           } else {
             return true;
@@ -226,7 +255,7 @@ class GameCanvas extends HTMLElement {
 
     // Add the onTouch method
     circ.onTouch = (callback) => {
-      circ.addEventListener('touchstart', (e) => {
+      circ.addEventListener("touchstart", (e) => {
         const touch = e.touches[0];
         const circBounds = circ.getBoundingClientRect();
         const touchX = touch.clientX;
@@ -237,7 +266,7 @@ class GameCanvas extends HTMLElement {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= circBounds.width / 2) {
-          if (typeof callback === 'function') {
+          if (typeof callback === "function") {
             callback(e);
           } else {
             return true;
@@ -250,8 +279,8 @@ class GameCanvas extends HTMLElement {
 
     // Add the onRelease method
     circ.onRelease = (callback) => {
-      circ.addEventListener('touchend', (e) => {
-        if (typeof callback === 'function') {
+      circ.addEventListener("touchend", (e) => {
+        if (typeof callback === "function") {
           callback(e);
         }
       });
@@ -260,17 +289,26 @@ class GameCanvas extends HTMLElement {
     return circ;
   }
 
-  spr(x = 0, y = 0, width = 100, height = 100, href, rotate = 0, z = 0, scale = 1) {
-    const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+  spr(
+    x = 0,
+    y = 0,
+    width = 100,
+    height = 100,
+    href,
+    rotate = 0,
+    z = 0,
+    scale = 1
+  ) {
+    const img = document.createElementNS("http://www.w3.org/2000/svg", "image");
 
     const adjustedX = x - width / 2;
     const adjustedY = y - height / 2;
 
-    img.setAttribute('x', adjustedX);
-    img.setAttribute('y', adjustedY);
-    img.setAttribute('width', width);
-    img.setAttribute('height', height);
-    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', href);
+    img.setAttribute("x", adjustedX);
+    img.setAttribute("y", adjustedY);
+    img.setAttribute("width", width);
+    img.setAttribute("height", height);
+    img.setAttributeNS("http://www.w3.org/1999/xlink", "href", href);
 
     let transform = `
       translate(${x}, ${y})
@@ -278,7 +316,7 @@ class GameCanvas extends HTMLElement {
       rotate(${rotate})
       translate(${-x}, ${-y})
     `;
-    img.setAttribute('transform', transform.trim());
+    img.setAttribute("transform", transform.trim());
 
     this.elements.push({ element: img, z });
 
@@ -290,7 +328,7 @@ class GameCanvas extends HTMLElement {
 
     // Add the onClick method
     img.onClick = (callback) => {
-      img.addEventListener('click', (e) => {
+      img.addEventListener("click", (e) => {
         const imgBounds = img.getBoundingClientRect();
         const clickX = e.clientX;
         const clickY = e.clientY;
@@ -301,7 +339,7 @@ class GameCanvas extends HTMLElement {
           clickY >= imgBounds.top &&
           clickY <= imgBounds.bottom
         ) {
-          if (typeof callback === 'function') {
+          if (typeof callback === "function") {
             callback(e);
           } else {
             return true;
@@ -314,7 +352,7 @@ class GameCanvas extends HTMLElement {
 
     // Add the onTouch method
     img.onTouch = (callback) => {
-      img.addEventListener('touchstart', (e) => {
+      img.addEventListener("touchstart", (e) => {
         const touch = e.touches[0];
         const imgBounds = img.getBoundingClientRect();
         const touchX = touch.clientX;
@@ -326,7 +364,7 @@ class GameCanvas extends HTMLElement {
           touchY >= imgBounds.top &&
           touchY <= imgBounds.bottom
         ) {
-          if (typeof callback === 'function') {
+          if (typeof callback === "function") {
             callback(e);
           } else {
             return true;
@@ -339,8 +377,8 @@ class GameCanvas extends HTMLElement {
 
     // Add the onRelease method
     img.onRelease = (callback) => {
-      img.addEventListener('touchend', (e) => {
-        if (typeof callback === 'function') {
+      img.addEventListener("touchend", (e) => {
+        if (typeof callback === "function") {
           callback(e);
         }
       });
@@ -359,4 +397,4 @@ class GameCanvas extends HTMLElement {
   }
 }
 
-customElements.define('game-canvas', GameCanvas);
+customElements.define("game-canvas", GameCanvas);
