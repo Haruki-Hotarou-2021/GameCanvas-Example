@@ -21,9 +21,19 @@ let button = {
   touching: false,
 };
 
+// Keys
+const keys = {
+  aPressed: false,
+  sPressed: false,
+  dPressed: false,
+  wPressed: false,
+};
+
 function update() {
+  // Limpa a tela
   cv.clear();
 
+  // Desenha um retângulo
   const rect = cv.rect(
     button.x,
     -button.y,
@@ -34,6 +44,7 @@ function update() {
     button.z
   );
 
+  // Desenha um sprite
   const spr = cv.spr(
     player.x,
     -player.y,
@@ -44,22 +55,43 @@ function update() {
     player.z
   );
 
+  // Adiciona listener para quando o retângulo é tocado
   rect.onTouch(() => {
     console.log("Sprite Touched!");
     button.touching = true;
   });
 
+  // Adiciona listener para quando o retângulo é solto
   rect.onRelease(() => {
     console.log("Sprite Released!");
     button.touching = false;
   });
 
-  if (button.touching) {
+  // Adiciona listener para quando a tecla é pressionada
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "d" || event.key === "D") {
+      keys.dPressed = true;
+    }
+  });
+
+  // Adiciona listener para quando a tecla é solta
+  document.addEventListener("keyup", (event) => {
+    if (event.key === "d" || event.key === "D") {
+      keys.dPressed = false;
+    }
+  });
+
+  // Move o player
+  if (button.touching || keys.dPressed) {
     player.x += 1;
     player.rotate += 1;
   }
 
+  // Chama a função update em loop
   requestAnimationFrame(update);
 }
 
+// Inicia a função update
 update();
+
+
