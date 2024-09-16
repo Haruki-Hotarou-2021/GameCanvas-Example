@@ -14,14 +14,17 @@ class GameCanvas extends HTMLElement {
         width: 100%;
         height: 100%;
         user-select: none;
+        background-color: white;
+        padding: 0;
+        margin: 0;
       }
       svg {
         width: 100%;
         height: 100%;
       }
       .grid line {
-        stroke: lightgray;
-        stroke-width: 0.5;
+        stroke: #ccc;
+        stroke-width: 1;
       }
     `;
 
@@ -71,7 +74,9 @@ class GameCanvas extends HTMLElement {
       return;
     }
 
-    const viewBox = this.svg.viewBox.baseVal;
+    //const viewBox = this.svg.viewBox.baseVal;
+    const viewBox = { x: -1000, y: -1000, width: 2000, height: 2000 }
+
     for (let x = viewBox.x; x <= viewBox.x + viewBox.width; x += gridSize) {
       const line = document.createElementNS(
         "http://www.w3.org/2000/svg",

@@ -7,7 +7,7 @@ let player = {
   width: 100,
   height: 100,
   image: "https://via.placeholder.com/100",
-  rotation: 0,
+  rotate: 0,
 };
 
 let button = {
@@ -17,7 +17,7 @@ let button = {
   width: 100,
   height: 100,
   color: "blue",
-  rotation: 0,
+  rotate: 0,
   touching: false,
 };
 
@@ -40,7 +40,7 @@ function update() {
     player.width,
     player.height,
     player.image,
-    player.rotation,
+    player.rotate,
     player.z
   );
 
@@ -55,8 +55,8 @@ function update() {
   });
 
   if (button.touching) {
-    spr.x += 5;
-    spr.rotate += 1;
+    player.x += 1;
+    player.rotate += 1;
   }
 
   requestAnimationFrame(update);
