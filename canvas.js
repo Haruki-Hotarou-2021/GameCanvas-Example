@@ -41,7 +41,8 @@ class GameCanvas extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === 'grid') {
       this.updateGrid();
-    } else if (name === 'width' || name === 'height') {
+    }
+    if (name === 'width' || name === 'height') {
       this.updateSize();
     }
   }
@@ -50,10 +51,12 @@ class GameCanvas extends HTMLElement {
     const width = this.getAttribute('width');
     const height = this.getAttribute('height');
     if (width) {
-      this.svg.setAttribute('width', width);
+      //this.svg.setAttribute('width', width);
+      this.style.width = width;
     }
     if (height) {
-      this.svg.setAttribute('height', height);
+      //this.svg.setAttribute('height', height);
+      this.style.height = height;
     }
   }
 
@@ -85,7 +88,7 @@ class GameCanvas extends HTMLElement {
     }
   }
 
-  rect(x = 0, y = 0, width = 100, height = 100, color = 'black', rotate = 0, scale = 1, z = 0) {
+  rect(x = 0, y = 0, width = 100, height = 100, color = 'black', rotate = 0, z = 0, scale = 1) {
     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
 
     const adjustedX = x - width / 2;
@@ -174,7 +177,7 @@ class GameCanvas extends HTMLElement {
     return rect;
   }
 
-  circ(cx = 0, cy = 0, radius = 50, color = 'black', rotate = 0, scale = 1, z = 0) {
+  circ(cx = 0, cy = 0, radius = 50, color = 'black', rotate = 0, z = 0, scale = 1) {
     const circ = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 
     circ.setAttribute('cx', cx);
@@ -257,7 +260,7 @@ class GameCanvas extends HTMLElement {
     return circ;
   }
 
-  spr(x = 0, y = 0, width = 100, height = 100, href, rotate = 0, scale = 1, z = 0) {
+  spr(x = 0, y = 0, width = 100, height = 100, href, rotate = 0, z = 0, scale = 1) {
     const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
 
     const adjustedX = x - width / 2;
@@ -344,6 +347,15 @@ class GameCanvas extends HTMLElement {
     };
 
     return img;
+  }
+
+  // Método para limpar a tela
+  clear() {
+    this.elements = [];
+    while (this.svg.firstChild) {
+      this.svg.removeChild(this.svg.firstChild);
+    }
+    this.svg.appendChild(this.gridGroup); // Re-add the gridGroup
   }
 }
 

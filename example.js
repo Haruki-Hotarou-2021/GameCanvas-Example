@@ -11,8 +11,8 @@ let player = {
 };
 
 let button = {
-  x: 200,
-  y: 200,
+  x: 400,
+  y: -400,
   z: 10,
   width: 100,
   height: 100,
@@ -23,9 +23,11 @@ let button = {
 
 function update() {
   
+  cv.clear();
+
   const rect = cv.rect(
-    button.width, 
-    button.height, 
+    button.x, 
+    -button.y, 
     button.width, 
     button.height, 
     button.color, 
